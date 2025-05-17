@@ -3,6 +3,7 @@ package br.com.projeto.apigerenciamentodeestoque.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +19,8 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private UUID Id;
 
-    private String username;
+    @Column(unique = true)
+    private String username; //Fazer exception caso o username já exista
 
     private String password;
 
@@ -30,7 +32,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (userRole.getRoleName().equals("ADMIN")) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

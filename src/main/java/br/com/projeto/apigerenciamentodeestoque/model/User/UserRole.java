@@ -13,17 +13,13 @@ public class UserRole {
     @Column(name = "role_id")
     private long roleId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_name", nullable = false, unique = true)
     private String roleName;
 
     public enum Roles{
-        ADMIN(1L),
-        STOCKER(2L),
-        COMMON(3L);
-
-        Long roleID;
-
-        Roles(Long roleId) {
-            this.roleID = roleId;
-        }
+        ADMIN,
+        STOCKER,
+        COMMON;
     }
 }
