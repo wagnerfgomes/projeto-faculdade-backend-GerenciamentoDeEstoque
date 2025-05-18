@@ -3,6 +3,8 @@ package br.com.projeto.apigerenciamentodeestoque.model.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import javax.management.relation.Role;
+
 @Table(name = "roles")
 @Entity
 @Data
@@ -15,7 +17,7 @@ public class UserRole {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name", nullable = false, unique = true)
-    private String roleName;
+    private Roles roleName;
 
     public enum Roles{
         ADMIN,

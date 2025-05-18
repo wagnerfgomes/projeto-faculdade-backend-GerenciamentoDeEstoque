@@ -28,11 +28,11 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private UserRole userRole;
+    private UserRole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (userRole.getRoleName().equals("ADMIN")) {
+        if (role.getRoleName().equals("ADMIN")) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_USER"));
         }
