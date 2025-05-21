@@ -8,6 +8,7 @@ import br.com.projeto.apigerenciamentodeestoque.model.User.User;
 import br.com.projeto.apigerenciamentodeestoque.model.User.UserRole;
 import br.com.projeto.apigerenciamentodeestoque.repository.UserRepository;
 import br.com.projeto.apigerenciamentodeestoque.repository.UserRoleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AuthenticationService {
 
     @Autowired
@@ -46,6 +48,7 @@ public class AuthenticationService {
     }
 
     public void registerNewUser(RegisterDTO dto) {
+        log.info(dto.username());
         if(dto.username() == null || dto.password() == null) {
             throw new ApiException(ErrorDetails.EMPTY_FIELDS);
         }

@@ -35,11 +35,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO registerDTO){
-            try{
-                authenticationService.registerNewUser(registerDTO);
-                return ResponseEntity.status(HttpStatus.CREATED).build();
-            }catch (ApiException e){
-                return ResponseEntity.status(HttpStatusCode.valueOf(e.getStatusCode())).build();
-            }
+        authenticationService.registerNewUser(registerDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
