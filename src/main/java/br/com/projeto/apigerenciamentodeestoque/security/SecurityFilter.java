@@ -6,7 +6,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,11 +30,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         String token = readToken(request);
 
         if(token != null){
+
             String subject = tokenService.validateToken(token);
             UserDetails user = userRepository.findUserByUsername(subject);
-
+            System.out.println("Token: " + token);
+            System.out.println("Usuário autenticado: " + subject);
+            System.out.println("Roles: " + user.getAuthorities());
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
         }
 
         filterChain.doFilter(request, response);
