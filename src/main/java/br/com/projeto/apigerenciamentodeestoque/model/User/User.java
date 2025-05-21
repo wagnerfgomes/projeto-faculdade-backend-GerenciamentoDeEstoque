@@ -20,11 +20,12 @@ public class User implements UserDetails {
     private UUID Id;
 
     @Column(unique = true)
-    private String username; //Fazer exception caso o username já exista
+    private String username;
 
     private String password;
 
     private boolean active;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id")

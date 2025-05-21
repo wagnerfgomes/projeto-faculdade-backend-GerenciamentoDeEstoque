@@ -34,8 +34,12 @@ public class AuthenticationService {
     private TokenService tokenService;
 
     public String validateLogin(AuthenticationDTO dto){
-        if (userRepository.findUserByUsername(dto.username()) == null) {
+        User user = userRepository.findUserByUsername(dto.username());
+        if ( user == null) {
             throw new ApiException(ErrorDetails.USER_NOT_FOUND);
+        }
+        if (!user.isActive()){
+            throw new ApiException(ErrorDetails.USER_NOT_ACTIVE);
         }
         var userNamePassword = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
         try{
@@ -59,6 +63,7 @@ public class AuthenticationService {
         User user = new User();
         user.setUsername(dto.username());
         user.setPassword(encryptedPassword);
+        user.setActive(true);
         UserRole commonRole = userRoleRepository.findUserRoleByRoleName(UserRole.Roles.COMMON);
         user.setRole(commonRole);
         userRepository.save(user);
