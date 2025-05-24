@@ -22,7 +22,6 @@ public class UserService {
 
     public User userByName(String name){
         User user = userRepository.findUserByUsername(name);
-        log.info(user.toString());
         if(user == null){
             throw new ApiException(ErrorDetails.USER_NOT_FOUND);
         }
@@ -40,7 +39,7 @@ public class UserService {
             throw new ApiException(ErrorDetails.USER_NOT_FOUND);
         }
         if (dto.password() != null){
-            if (user.getPassword() != dto.password()) {
+            if (!new BCryptPasswordEncoder().matches(dto.password(), user.getPassword())) {
                 String encodePassword = new BCryptPasswordEncoder().encode(dto.password());
                 user.setPassword(encodePassword);
             }else {

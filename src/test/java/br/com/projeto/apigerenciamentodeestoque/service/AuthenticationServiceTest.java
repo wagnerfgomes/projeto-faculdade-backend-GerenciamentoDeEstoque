@@ -57,7 +57,8 @@ class AuthenticationServiceTest {
         User userMock = new User();
         userMock.setId(uuid);
         userMock.setUsername("testUser");
-        userMock.setPassword("testPassword");
+        var encryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
+        userMock.setPassword(encryptedPassword);
         userMock.setActive(true);
         UserRole userRole = new UserRole();
         userRole.setRoleName(UserRole.Roles.COMMON);
@@ -96,7 +97,8 @@ class AuthenticationServiceTest {
         User userMock = new User();
         userMock.setId(uuid);
         userMock.setUsername("testUser");
-        userMock.setPassword("testPassword");
+        var encryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
+        userMock.setPassword(encryptedPassword);
         userMock.setActive(false);
         UserRole userRole = new UserRole();
         userRole.setRoleName(UserRole.Roles.COMMON);
@@ -119,7 +121,8 @@ class AuthenticationServiceTest {
         User userMock = new User();
         userMock.setId(uuid);
         userMock.setUsername("testUser");
-        userMock.setPassword("testPassword");
+        var encryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
+        userMock.setPassword(encryptedPassword);
         userMock.setActive(true);
         UserRole userRole = new UserRole();
         userRole.setRoleName(UserRole.Roles.COMMON);
@@ -147,8 +150,8 @@ class AuthenticationServiceTest {
         User userMock = new User();
         userMock.setId(uuid);
         userMock.setUsername("testUser");
-        var emcryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
-        userMock.setPassword(emcryptedPassword);
+        var encryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
+        userMock.setPassword(encryptedPassword);
         userMock.setActive(true);
         UserRole mockRole = new UserRole();
         mockRole.setRoleName(UserRole.Roles.COMMON);
@@ -185,8 +188,8 @@ class AuthenticationServiceTest {
         User userMock = new User();
         userMock.setId(uuid);
         userMock.setUsername("testUser");
-        var emcryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
-        userMock.setPassword(emcryptedPassword);
+        var encryptedPassword = new BCryptPasswordEncoder().encode("testPassword");
+        userMock.setPassword(encryptedPassword);
         userMock.setActive(true);
         UserRole mockRole = new UserRole();
         mockRole.setRoleName(UserRole.Roles.COMMON);
