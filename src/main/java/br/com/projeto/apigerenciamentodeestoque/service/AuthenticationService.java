@@ -52,7 +52,6 @@ public class AuthenticationService {
     }
 
     public void registerNewUser(RegisterDTO dto) {
-        log.info(dto.username());
         if(dto.username() == null || dto.password() == null) {
             throw new ApiException(ErrorDetails.EMPTY_FIELDS);
         }
