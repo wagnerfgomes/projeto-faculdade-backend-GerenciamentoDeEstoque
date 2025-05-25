@@ -36,17 +36,21 @@ public class AuthenticationService {
     public String validateLogin(AuthenticationDTO dto){
         User user = userRepository.findUserByUsername(dto.username());
         if ( user == null) {
+            log.error("usuário {} tentou logar, mas não foi encontrado", dto.username());
             throw new ApiException(ErrorDetails.USER_NOT_FOUND);
         }
         if (!user.isActive()){
+            log.error("usuário {} tentou logar, mas está desativado", dto.username());
             throw new ApiException(ErrorDetails.USER_NOT_ACTIVE);
         }
         var userNamePassword = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
         try{
             Authentication authenticate = authenticationManager.authenticate(userNamePassword);
             String token = tokenService.generateToken((User) authenticate.getPrincipal());
+            log.info("usuário {} logou com sucesso", dto.username());
             return token;
         }catch (BadCredentialsException e){
+            log.error("usuário {} tentou logar com as credências erradas", dto.username());
             throw new ApiException(ErrorDetails.ACESS_DENIED);
         }
     }
@@ -56,6 +60,7 @@ public class AuthenticationService {
             throw new ApiException(ErrorDetails.EMPTY_FIELDS);
         }
         if (userRepository.findUserByUsername(dto.username()) != null) {
+            log.error("usuário {} tentou se registrar pela segunda vez", dto.username());
             throw new ApiException(ErrorDetails.USER_EXIST);
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
@@ -65,6 +70,7 @@ public class AuthenticationService {
         user.setActive(true);
         UserRole commonRole = userRoleRepository.findUserRoleByRoleName(UserRole.Roles.COMMON);
         user.setRole(commonRole);
+        log.info("usuário {} se registrou com sucesso", dto.username());
         userRepository.save(user);
     }
 }

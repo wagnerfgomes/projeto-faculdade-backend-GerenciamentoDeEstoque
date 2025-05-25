@@ -20,9 +20,10 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User userByName(String name){
-        User user = userRepository.findUserByUsername(name);
+    public User userByName(String username){
+        User user = userRepository.findUserByUsername(username);
         if(user == null){
+            log.error("usuário {} foi buscado na base, mas não foi encontrado", username);
             throw new ApiException(ErrorDetails.USER_NOT_FOUND);
         }
         return user;
@@ -36,6 +37,7 @@ public class UserService {
     public User updateUser(UserDto dto){
         User user = userRepository.findUserByUsername(dto.username());
         if(user == null){
+            log.error("usuário {} foi buscado na base, mas não foi encontrado", dto.username());
             throw new ApiException(ErrorDetails.USER_NOT_FOUND);
         }
         if (dto.password() != null){
@@ -43,6 +45,7 @@ public class UserService {
                 String encodePassword = new BCryptPasswordEncoder().encode(dto.password());
                 user.setPassword(encodePassword);
             }else {
+                log.error("usuário {} tentou alterar a senha por uma senha já utilizada antes", dto.username());
                 throw new ApiException(ErrorDetails.PASSWORD_ALREADY_USED);
             }
         }

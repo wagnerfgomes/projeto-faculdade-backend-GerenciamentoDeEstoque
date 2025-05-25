@@ -4,6 +4,7 @@ import br.com.projeto.apigerenciamentodeestoque.model.User.User;
 import br.com.projeto.apigerenciamentodeestoque.model.User.UserRole;
 import br.com.projeto.apigerenciamentodeestoque.repository.UserRepository;
 import br.com.projeto.apigerenciamentodeestoque.repository.UserRoleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
-
+@Slf4j
 @Configuration
 public class AdminUserConfig implements CommandLineRunner {
 
@@ -36,7 +37,7 @@ public class AdminUserConfig implements CommandLineRunner {
         var userAdmin = userRepository.findUserByUsername("admin");
 
         if (userAdmin != null){
-            System.out.println("admin exite!!");
+            log.info("Usuário admin já existe");
         } else {
             var user = new User();
             user.setUsername("admin");
@@ -44,7 +45,7 @@ public class AdminUserConfig implements CommandLineRunner {
             user.setRole(roleAdmin);
             user.setActive(true);
             userRepository.save(user);
-            System.out.println("admin Criado!!");
+            log.info("Usuário admin criado com sucesso");
         }
 
     }
