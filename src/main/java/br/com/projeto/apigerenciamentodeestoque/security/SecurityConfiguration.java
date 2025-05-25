@@ -35,6 +35,9 @@ public class SecurityConfiguration {
                                         .requestMatchers(HttpMethod.GET, "/user").hasRole("ADMIN")
                                         .requestMatchers(HttpMethod.GET, "/user/all").hasRole("ADMIN")
                                         .requestMatchers(HttpMethod.PUT, "/user/update").hasRole("ADMIN")
+                                        .requestMatchers("/v3/api-docs/**",
+                                                "/swagger-ui/**",
+                                                "/swagger-ui.html").permitAll()
                                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
