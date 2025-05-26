@@ -6,7 +6,10 @@ public enum ErrorDetails {
     USER_EXIST("Este usuário já existe!", 409, "Err-03"),
     EMPTY_FIELDS("Os Campos usuário ou senha está vazio", 400, "Err-03"),
     PASSWORD_ALREADY_USED("A nova senha não pode ser igual à anterior.", 409, "Err-04"),
-    USER_NOT_ACTIVE("Usuário não está ativo.", 400, "Err-05");
+    USER_NOT_ACTIVE("Usuário não está ativo.", 400, "Err-05"),
+    PRODUCT_ALREADY_EXISTS("Já existe um produto com esse nome", 409, "Err-06")
+
+    ;
 
     private final String message;
     private final int statusCode;
