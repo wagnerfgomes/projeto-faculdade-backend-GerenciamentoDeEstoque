@@ -5,10 +5,5 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 
-@Data
-public class UpdateProductDTO {
-    private String name;
-    private Integer quantity;
-    private BigDecimal price;
-
-}
+public record UpdateProductDTO(String name,Integer quantity, BigDecimal price)
+{}
