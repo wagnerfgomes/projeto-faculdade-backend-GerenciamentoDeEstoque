@@ -21,30 +21,25 @@ public class ProductController {
     @PostMapping("/register")
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         Product createdProduct = productService.createProduct(productDTO);
-        return ResponseEntity.ok().body(createdProduct);
+        return ResponseEntity.status(201).body(createdProduct);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/listar")
     public ResponseEntity<?> listarProdutos(@RequestParam(required = false) Optional<String> name) {
-        try {
-            List<Product> produtos = productService.listarProdutos(name);
-            return ResponseEntity.ok(produtos);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro ao listar produtos: " + e.getMessage());
-        }
+        List<Product> produtos = productService.listarProdutos(name);
+        return ResponseEntity.ok(produtos);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> atualizar(@PathVariable Long id, @RequestBody UpdateProductDTO dto) {
-        return productService.atualizarProduto(id, dto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PutMapping
+    public ResponseEntity<Product> atualizar(@RequestParam(name = "name") String name, @RequestBody UpdateProductDTO dto) {
+        Product product = productService.atualizarProduto(dto);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/desativar")
-    public ResponseEntity<Product> desativarProduto(@PathVariable Long id) {
-        return productService.desativarProduto(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PutMapping("/desativar")
+    public ResponseEntity<Product> desativarProduto(@RequestParam String name) {
+        Product produto = productService.desativarProduto(name);
+        return ResponseEntity.ok(produto);
     }
 }
+

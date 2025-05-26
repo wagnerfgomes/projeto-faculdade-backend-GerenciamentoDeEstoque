@@ -23,4 +23,8 @@ public class Product {
     private int quantity;
     private Boolean active = true;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryProduct categoryProduct;
+
 }
