@@ -25,20 +25,20 @@ public class CategoryProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<CategoryProduct>> listCategoryProducts(@RequestParam(name = "nameopt") Optional<String> nameopt) {
-        List<CategoryProduct> categoryProducts = categoryProductService.listCategoryProducts(nameopt);
+    public ResponseEntity<List<CategoryProduct>> listCategoryProducts(@RequestParam(name = "name", required = false) String name) {
+        List<CategoryProduct> categoryProducts = categoryProductService.listCategoryProducts(name);
         return ResponseEntity.ok().body(categoryProducts);
     }
 
     @GetMapping
-    public ResponseEntity<CategoryProduct> getCategoryByName(@RequestParam(name = "nameopt") String nameopt) {
-        var categoryProducts = categoryProductService.categoryByName(nameopt);
+    public ResponseEntity<CategoryProduct> getCategoryByName(@RequestParam(name = "name") String name) {
+        var categoryProducts = categoryProductService.categoryByName(name);
         return ResponseEntity.ok().body(categoryProducts);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CategoryProduct> updateCategoryProduct(@RequestBody UpdateCategoryProductDto updateCategoryProductDto) {
-        CategoryProduct updatedCategoryProduct = categoryProductService.updateCategoryProduct(updateCategoryProductDto);
+    public ResponseEntity<CategoryProduct> updateCategoryProduct(@RequestParam(name="name") String name, @RequestBody UpdateCategoryProductDto updateCategoryProductDto) {
+        CategoryProduct updatedCategoryProduct = categoryProductService.updateCategoryProduct(name, updateCategoryProductDto);
         return ResponseEntity.ok().body(updatedCategoryProduct);
     }
 

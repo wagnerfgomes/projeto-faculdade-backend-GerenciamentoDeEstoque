@@ -41,21 +41,18 @@ public class CategoryProductService {
     }
 
 
-    public List<CategoryProduct> listCategoryProducts(Optional<String> nameOpt) {
-        List<CategoryProduct> categoryProductList = nameOpt
-                .filter(name -> !name.isBlank())
-                .map(name -> categoryProductRepository.findByNameContainingIgnoreCase(name))
-                .orElseGet(categoryProductRepository::findAll);
-
-        if (categoryProductList.isEmpty()) {
-            throw new ApiException(ErrorDetails.CATEGORY_PRODUCT_NOT_FOUND);
+    public List<CategoryProduct> listCategoryProducts(String name) {
+        if (name == null || name.isEmpty()) {
+            return categoryProductRepository.findAll();
         }
+
+        List<CategoryProduct> categoryProductList =  categoryProductRepository.findProductByNameContainingIgnoreCase(name);
 
         return categoryProductList;
     }
 
-    public CategoryProduct categoryByName(String nameopt) {
-        CategoryProduct categoryProduct = categoryProductRepository.findByName(nameopt);
+    public CategoryProduct categoryByName(String name) {
+        CategoryProduct categoryProduct = categoryProductRepository.findByName(name);
 
         if (categoryProduct == null) {
             throw new ApiException(ErrorDetails.CATEGORY_PRODUCT_NOT_FOUND);
@@ -64,18 +61,16 @@ public class CategoryProductService {
         return categoryProduct;
     }
 
-    public CategoryProduct updateCategoryProduct(UpdateCategoryProductDto dto) {
+    public CategoryProduct updateCategoryProduct(String name, UpdateCategoryProductDto dto) {
 
-        if( dto.name() == null & dto.description() == null) {
+        if(dto.description() == null) {
             throw new ApiException(ErrorDetails.EMPTY_FIELDS);
         }
 
-        CategoryProduct categoryProduct = categoryProductRepository.findByName(dto.name());
-
+        CategoryProduct categoryProduct = categoryProductRepository.findByName(name);
         if (categoryProduct == null) {
             throw new ApiException(ErrorDetails.CATEGORY_PRODUCT_NOT_FOUND);
         }
-
         categoryProduct.setDescription(dto.description());
         categoryProductRepository.save(categoryProduct);
         return categoryProduct;

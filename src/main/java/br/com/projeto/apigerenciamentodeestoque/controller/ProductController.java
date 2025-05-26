@@ -25,15 +25,15 @@ public class ProductController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<?> listarProdutos(@RequestParam(required = false) Optional<String> name) {
+    public ResponseEntity<?> listarProdutos(@RequestParam(required = false, name = "name") String name) {
         List<Product> produtos = productService.listarProdutos(name);
-        return ResponseEntity.ok(produtos);
+        return ResponseEntity.ok().body(produtos);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<Product> atualizar(@RequestParam(name = "name") String name, @RequestBody UpdateProductDTO dto) {
-        Product product = productService.atualizarProduto(dto);
-        return ResponseEntity.ok().build();
+        Product product = productService.atualizarProduto(name,dto);
+        return ResponseEntity.ok().body(product);
     }
 
     @PutMapping("/desativar")

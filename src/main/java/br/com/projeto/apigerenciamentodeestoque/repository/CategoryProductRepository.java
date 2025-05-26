@@ -1,6 +1,7 @@
 package br.com.projeto.apigerenciamentodeestoque.repository;
 
 import br.com.projeto.apigerenciamentodeestoque.model.Product.CategoryProduct;
+import br.com.projeto.apigerenciamentodeestoque.model.Product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.rmi.server.UID;
@@ -11,5 +12,5 @@ public interface CategoryProductRepository extends JpaRepository<CategoryProduct
 
     CategoryProduct findByName(String name);
 
-    List<CategoryProduct> findByNameContainingIgnoreCase(String name);
+    List<CategoryProduct> findProductByNameContainingIgnoreCase(String name);
 }

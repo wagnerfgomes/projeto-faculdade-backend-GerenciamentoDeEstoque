@@ -18,7 +18,7 @@ public class CategoryProduct {
     @Column(name = "category_name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "category_name")
+    @Column(name = "category_description")
     private String description;
 
 }

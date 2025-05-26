@@ -35,36 +35,53 @@ public class ProductService {
         }
 
         CategoryProduct categoryProduct = categoryProductRepository.findByName(productDTO.categoryName());
+        CategoryProduct defaultCategory = categoryProductRepository.findByName("Sem Categoria");
 
         Product product = new Product();
         product.setName(productDTO.name());
         product.setDescription(productDTO.description());
         product.setQuantity(productDTO.quantity());
-        product.setCategoryProduct(categoryProduct);
+        if (categoryProduct == null) {
+            product.setCategoryProduct(defaultCategory);
+        } else {
+            product.setCategoryProduct(categoryProduct);
+        }
+        product.setPrice(productDTO.price());
+        product.setActive(true);
 
         productRepository.save(product);
 
         return product;
     }
 
-    public List<Product> listarProdutos(Optional<String> nameOpt) {
-        return nameOpt
-                .filter(name -> !name.isBlank())
-                .map(name -> productRepository.findByNameContainingIgnoreCase(name))
-                .orElseGet(productRepository::findAll);
+    public List<Product> listarProdutos(String name) {
+        if (name == null || name.isEmpty()) {
+            return productRepository.findAll();
+        }
+
+        List<Product> products =  productRepository.findProductByNameContainingIgnoreCase(name);
+        return products;
     }
 
-    public Product atualizarProduto(UpdateProductDTO dto) {
-        Product product = productRepository.findProductByName(dto.name());
+    public Product atualizarProduto(String name, UpdateProductDTO dto) {
+        Product product = productRepository.findProductByName(name);
 
         if (product == null) {
             throw new ApiException(ErrorDetails.PRODUCT_NOT_FOUND);
         }
 
-        product.setPrice(dto.price());
-        product.setDescription(dto.description());
-        product.setQuantity(dto.quantity());
-        product.setName(dto.name());
+        if (dto.name() != null) {
+            product.setName(dto.name());
+        }
+        if (dto.price() != null) {
+            product.setPrice(dto.price());
+        }
+        if (dto.description() != null) {
+            product.setDescription(dto.description());
+        }
+        if (dto.quantity() != null) {
+            product.setQuantity(dto.quantity());
+        }
         CategoryProduct categoryProduct = categoryProductRepository.findByName(dto.categoryName());
         if (categoryProduct == null) {
             throw new ApiException(ErrorDetails.CATEGORY_PRODUCT_NOT_FOUND);
