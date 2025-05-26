@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "product")
+@Table(name = "category_product")
 public class CategoryProduct {
 
     @Id
@@ -15,8 +15,10 @@ public class CategoryProduct {
     @Column(name = "category_id")
     private UUID id;
 
+    @Column(name = "category_name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "category_name")
     private String description;
 
 }
