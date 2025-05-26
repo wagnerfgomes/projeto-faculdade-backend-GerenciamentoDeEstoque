@@ -14,9 +14,10 @@ public enum ErrorDetails {
     PRODUCT_LIST_ERROR("Erro ao listar produtos", 500, "Err-010"),
     PRODUCT_ALREADY_DEACTIVATED("Produto já desativado", 400, "Err-011"),
 
+
     CATEGORY_PRODUCT_REQUIRED("Categoria é obrigatória", 400, "Err-9"),
-    CATEGORY_ALREADY_EXISTS("Já existe uma categoria com esse nome", 409, "Err-"),
-    CATEGORY_PRODUCT_NOT_FOUND("Categoria não encontrada", 404, "Err-")
+    CATEGORY_ALREADY_EXISTS("Já existe uma categoria com esse nome", 409, "Err-12"),
+    CATEGORY_PRODUCT_NOT_FOUND("Categoria não encontrada", 404, "Err-13")
     ;
 
     private final String message;
