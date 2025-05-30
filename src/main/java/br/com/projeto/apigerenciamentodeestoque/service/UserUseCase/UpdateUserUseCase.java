@@ -1,4 +1,4 @@
-package br.com.projeto.apigerenciamentodeestoque.service;
+package br.com.projeto.apigerenciamentodeestoque.service.UserUseCase;
 
 import br.com.projeto.apigerenciamentodeestoque.DTOs.UserDto;
 import br.com.projeto.apigerenciamentodeestoque.exception.ApiException;
@@ -10,31 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-
 @Slf4j
 @Service
-public class UserService {
+public class UpdateUserUseCase {
 
     @Autowired
     private UserRepository userRepository;
 
-    public User userByName(String username){
-        User user = userRepository.findUserByUsername(username);
-        if(user == null){
-            log.error("usuário {} foi buscado na base, mas não foi encontrado", username);
-            throw new ApiException(ErrorDetails.USER_NOT_FOUND);
-        }
-        return user;
-    }
-
-    public List<User> allUsers(){
-        List<User> users = userRepository.findAll();
-        return users;
-    }
-
-    public User updateUser(UserDto dto){
+    public User execute(UserDto dto){
         User user = userRepository.findUserByUsername(dto.username());
         if(user == null){
             log.error("usuário {} foi buscado na base, mas não foi encontrado", dto.username());
@@ -53,5 +36,4 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
-
 }

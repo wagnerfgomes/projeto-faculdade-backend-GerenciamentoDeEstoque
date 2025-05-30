@@ -3,7 +3,9 @@ package br.com.projeto.apigerenciamentodeestoque.controller;
 import br.com.projeto.apigerenciamentodeestoque.DTOs.UserDto;
 import br.com.projeto.apigerenciamentodeestoque.model.User.User;
 import br.com.projeto.apigerenciamentodeestoque.repository.UserRoleRepository;
-import br.com.projeto.apigerenciamentodeestoque.service.UserService;
+import br.com.projeto.apigerenciamentodeestoque.service.UserUseCase.GetAllUsersUseCase;
+import br.com.projeto.apigerenciamentodeestoque.service.UserUseCase.GetUserByNameUseCase;
+import br.com.projeto.apigerenciamentodeestoque.service.UserUseCase.UpdateUserUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,8 +21,15 @@ public class UserController {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
     @Autowired
-    private UserService userService;
+    private GetUserByNameUseCase getUserByNameUseCase;
+
+    @Autowired
+    private GetAllUsersUseCase getAllUsersUseCase;
+
+    @Autowired
+    private UpdateUserUseCase updateUserUseCase;
 
 
     @GetMapping
@@ -31,8 +40,8 @@ public class UserController {
                     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
             }
     )
-    public ResponseEntity<User> getUserById(@RequestParam(name = "username") String username){
-        User user = userService.userByName(username);
+    public ResponseEntity<User> getUserBayName(@RequestParam(name = "username") String username){
+        User user = getUserByNameUseCase.execute(username);
         return ResponseEntity.ok().body(user);
     }
 
@@ -44,9 +53,8 @@ public class UserController {
                     @ApiResponse(responseCode = "404", description = "Usuários não encontrados")
             }
     )
-
     public ResponseEntity<List<User>> getAllUsers(){
-        var users = userService.allUsers();
+        var users = getAllUsersUseCase.execute();
         return ResponseEntity.ok().body(users);
     }
 
@@ -60,7 +68,7 @@ public class UserController {
             }
     )
     public ResponseEntity updateUser(@RequestBody UserDto dto){
-        User user = userService.updateUser(dto);
+        User user = updateUserUseCase.execute(dto);
         return ResponseEntity.ok().body(user);
     }
 }
