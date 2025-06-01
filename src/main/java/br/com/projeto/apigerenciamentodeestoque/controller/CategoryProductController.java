@@ -20,19 +20,19 @@ import java.util.UUID;
 public class CategoryProductController {
 
     @Autowired
-    CreateCategoryProductUseCase createCategoryProduct;
+    private CreateCategoryProductUseCase createCategoryProduct;
 
     @Autowired
-    ListCategoryProductsUseCase listCategoryProducts;
+    private ListCategoryProductsUseCase listCategoryProducts;
 
     @Autowired
-    GetCategoryProductByNameUseCase getCategoryProductByNameUseCase;
+    private GetCategoryProductByNameUseCase getCategoryProductByNameUseCase;
 
     @Autowired
-    UpdateCategoryProductUseCase updateCategoryProductUseCase;
+    private UpdateCategoryProductUseCase updateCategoryProductUseCase;
 
     @Autowired
-    DeleteCategoryProductUseCase deleteCategoryProductUseCase;
+    private DeleteCategoryProductUseCase deleteCategoryProductUseCase;
 
     @Operation(summary = "Cadastrar nova categoria de produto", method = "POST")
     @ApiResponses(value = {

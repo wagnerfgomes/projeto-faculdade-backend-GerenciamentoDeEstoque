@@ -3,14 +3,17 @@ package br.com.projeto.apigerenciamentodeestoque.controller;
 import br.com.projeto.apigerenciamentodeestoque.DTOs.ProductDTO;
 import br.com.projeto.apigerenciamentodeestoque.DTOs.UpdateProductDTO;
 import br.com.projeto.apigerenciamentodeestoque.model.Product.Product;
-import br.com.projeto.apigerenciamentodeestoque.service.ProductService;
+import br.com.projeto.apigerenciamentodeestoque.service.ProductUseCase.CreateProductUseCase;
+import br.com.projeto.apigerenciamentodeestoque.service.ProductUseCase.DesactivateProductUseCase;
+import br.com.projeto.apigerenciamentodeestoque.service.ProductUseCase.ListProductsUseCase;
+import br.com.projeto.apigerenciamentodeestoque.service.ProductUseCase.UpdateProductUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+// Adiciona imports do Swagger/OpenAPI
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,7 +23,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    CreateProductUseCase createProduct;
+
+    @Autowired
+    ListProductsUseCase listProductsUseCase;
+
+    @Autowired
+    UpdateProductUseCase updateProductUseCase;
+
+    @Autowired
+    DesactivateProductUseCase desactivateProductUseCase;
 
     @Operation(summary = "Cadastro de produto", method = "POST")
     @ApiResponses(value = {
@@ -30,7 +42,7 @@ public class ProductController {
     })
     @PostMapping("/register")
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
-        Product createdProduct = productService.createProduct(productDTO);
+        Product createdProduct = createProduct.execute(productDTO);
         return ResponseEntity.status(201).body(createdProduct);
     }
 
@@ -40,7 +52,7 @@ public class ProductController {
     })
     @GetMapping("/listar")
     public ResponseEntity<?> listarProdutos(@RequestParam(required = false, name = "name") String name) {
-        List<Product> produtos = productService.listarProdutos(name);
+        List<Product> produtos = listProductsUseCase.execute(name);
         return ResponseEntity.ok().body(produtos);
     }
 
@@ -52,7 +64,7 @@ public class ProductController {
     })
     @PutMapping("/update")
     public ResponseEntity<Product> atualizar(@RequestParam(name = "name") String name, @RequestBody UpdateProductDTO dto) {
-        Product product = productService.atualizarProduto(name,dto);
+        Product product = updateProductUseCase.execute(name,dto);
         return ResponseEntity.ok().body(product);
     }
 
@@ -64,8 +76,7 @@ public class ProductController {
     })
     @PutMapping("/desativar")
     public ResponseEntity<Product> desativarProduto(@RequestParam String name) {
-        Product produto = productService.desativarProduto(name);
+        Product produto = desactivateProductUseCase.execute(name);
         return ResponseEntity.ok(produto);
     }
 }
-
