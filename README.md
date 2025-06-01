@@ -87,4 +87,4 @@ API para controle de produtos, categorias e usuários em um sistema de estoque.
 
 ---
 Projeto acadêmico — Uso não comercial permitido.
-[License :book:](https://github.com/seu-usuario/api-Gerenciamento-de-estoque/blob/main/LICENSE)
+[License :book:](https://github.com/wagnerfgomes/projeto-faculdade-backend-GerenciamentoDeEstoque/blob/master/license)
