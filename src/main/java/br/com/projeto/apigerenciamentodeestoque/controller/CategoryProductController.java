@@ -3,7 +3,7 @@ package br.com.projeto.apigerenciamentodeestoque.controller;
 import br.com.projeto.apigerenciamentodeestoque.DTOs.RegisterCategoryProductDto;
 import br.com.projeto.apigerenciamentodeestoque.DTOs.UpdateCategoryProductDto;
 import br.com.projeto.apigerenciamentodeestoque.model.Product.CategoryProduct;
-import br.com.projeto.apigerenciamentodeestoque.service.CategoryProductService;
+import br.com.projeto.apigerenciamentodeestoque.service.CategoryProductUseCase.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,13 +13,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/categoryproduct")
 public class CategoryProductController {
 
     @Autowired
-    CategoryProductService categoryProductService;
+    CreateCategoryProductUseCase createCategoryProduct;
+
+    @Autowired
+    ListCategoryProductsUseCase listCategoryProducts;
+
+    @Autowired
+    GetCategoryProductByNameUseCase getCategoryProductByNameUseCase;
+
+    @Autowired
+    UpdateCategoryProductUseCase updateCategoryProductUseCase;
+
+    @Autowired
+    DeleteCategoryProductUseCase deleteCategoryProductUseCase;
 
     @Operation(summary = "Cadastrar nova categoria de produto", method = "POST")
     @ApiResponses(value = {
@@ -28,7 +41,7 @@ public class CategoryProductController {
     })
     @PostMapping("/create")
     public ResponseEntity createCategoryProduct(@RequestBody RegisterCategoryProductDto registerCategoryProductDto) {
-        CategoryProduct categoryProduct = categoryProductService.createCategoryProduct(registerCategoryProductDto);
+        CategoryProduct categoryProduct = createCategoryProduct.execute(registerCategoryProductDto);
         return ResponseEntity.status(201).body(categoryProduct);
     }
 
@@ -38,7 +51,7 @@ public class CategoryProductController {
     })
     @GetMapping("/list")
     public ResponseEntity<List<CategoryProduct>> listCategoryProducts(@RequestParam(name = "name", required = false) String name) {
-        List<CategoryProduct> categoryProducts = categoryProductService.listCategoryProducts(name);
+        List<CategoryProduct> categoryProducts = listCategoryProducts.execute(name);
         return ResponseEntity.ok().body(categoryProducts);
     }
 
@@ -49,7 +62,7 @@ public class CategoryProductController {
     })
     @GetMapping
     public ResponseEntity<CategoryProduct> getCategoryByName(@RequestParam(name = "name") String name) {
-        var categoryProducts = categoryProductService.categoryByName(name);
+        var categoryProducts = getCategoryProductByNameUseCase.execute(name);
         return ResponseEntity.ok().body(categoryProducts);
     }
 
@@ -60,9 +73,9 @@ public class CategoryProductController {
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
     @PutMapping("/update")
-    public ResponseEntity<CategoryProduct> updateCategoryProduct(@RequestParam(name="name") String name, @RequestBody UpdateCategoryProductDto updateCategoryProductDto) {
-        CategoryProduct updatedCategoryProduct = categoryProductService.updateCategoryProduct(name, updateCategoryProductDto);
-        return ResponseEntity.ok().body(updatedCategoryProduct);
+    public ResponseEntity<CategoryProduct> updateCategoryProduct(@RequestParam(name="id")UUID id, @RequestBody UpdateCategoryProductDto updateCategoryProductDto) {
+        Optional<CategoryProduct> updatedCategoryProduct = updateCategoryProductUseCase.execute(id, updateCategoryProductDto);
+        return ResponseEntity.ok().body(updatedCategoryProduct.get());
     }
 
     @Operation(summary = "Deletar categoria de produto", method = "DELETE")
@@ -72,7 +85,7 @@ public class CategoryProductController {
     })
     @DeleteMapping("/delete/{name}")
     public ResponseEntity deleteCategoryProduct(@PathVariable String name) {
-        categoryProductService.deleteCategoryProduct(name);
+        deleteCategoryProductUseCase.execute(name);
         return ResponseEntity.noContent().build();
     }
 
